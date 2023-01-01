@@ -15,7 +15,7 @@ const StyledTable = styled.table`
     color: white;
   }
 
-  & tr:nth-child(even) {
+  & tr:nth-of-type(even) {
     background-color: #f2f2f2;
   }
 
@@ -33,6 +33,7 @@ export function PaceList (props: PaceListProps): JSX.Element {
   if (distance === undefined || pacing === undefined) return <></>
 
   const length = Math.ceil(distance)
+  if (length > 1000) return <></>
 
   const tableList: Array<{
     unit: number
