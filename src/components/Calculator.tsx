@@ -21,24 +21,34 @@ export function Calculator (props: CalculatorProps): JSX.Element {
   const [calculated, setCalculated] = useState<FieldConstant>()
 
   function setUnit (unit: DistanceUnitConstant): void {
-    let { distance } = payload
-    if (distance === undefined) return
+    let { distance, time, pacing } = payload
 
     switch (unit) {
       case DistanceUnitConstant.KILOMETERS:{
-        distance = distance / UNIT_FACTOR
+        if (distance !== undefined) {
+          distance = distance / UNIT_FACTOR
+        }
+        if (pacing !== undefined) {
+          pacing = pacing / UNIT_FACTOR
+        }
         break
       }
       case DistanceUnitConstant.MILES:{
-        distance = distance * UNIT_FACTOR
+        if (distance !== undefined) {
+          distance = distance * UNIT_FACTOR
+        }
+        if (pacing !== undefined) {
+          pacing = pacing * UNIT_FACTOR
+        }
         break
       }
     }
 
     setPayload(payload => ({
-      ...payload,
+      unit,
       distance,
-      unit
+      time,
+      pacing
     }))
   }
 
@@ -100,7 +110,7 @@ export function Calculator (props: CalculatorProps): JSX.Element {
       case m !== undefined : {
         targetPayload = {
           ...payload,
-          pacing: (payload?.pacing ?? 0) + (m! - Math.floor((payload?.pacing ?? 0) % (60 * 60) / 60)) * 60
+          pacing: (payload?.pacing ?? 0) + (m! - Math.floor((payload?.pacing ?? 0) / 60)) * 60
         }
         break
       }
@@ -272,7 +282,7 @@ export function Calculator (props: CalculatorProps): JSX.Element {
                                 }
                                 label={payload.unit}
                             />}
-                            value={(payload.distance ?? '') as any}
+                            value={(payload.distance?.toString() ?? '') as any}
                             onInputChange={(_, value) => {
                               if (value === '' || value === '0') return
                               setDistance(Number(value))
@@ -293,7 +303,7 @@ export function Calculator (props: CalculatorProps): JSX.Element {
                                       ? COLOR
                                       : {}
                                 }
-                                value={((payload.time) != null) ? Math.floor(payload.time / 60 / 60) : ''}
+                                value={((payload.time) != null) ? Math.floor(payload.time / 60 / 60).toString() : ''}
                                 onChange={(event) => {
                                   setTime({ h: Number(event.target.value) })
                                 }}
@@ -308,7 +318,7 @@ export function Calculator (props: CalculatorProps): JSX.Element {
                                       ? COLOR
                                       : {}
                                 }
-                                value={((payload.time) != null) ? Math.floor(payload.time % (60 * 60) / 60) : ''}
+                                value={((payload.time) != null) ? Math.floor(payload.time % (60 * 60) / 60).toString() : ''}
                                 onChange={(event) => {
                                   setTime({ m: Number(event.target.value) })
                                 }}
@@ -323,7 +333,7 @@ export function Calculator (props: CalculatorProps): JSX.Element {
                                       ? COLOR
                                       : {}
                                 }
-                                value={((payload.time) != null) ? Math.floor(payload.time % 60) : ''}
+                                value={((payload.time) != null) ? Math.floor(payload.time % 60).toString() : ''}
                                 onChange={(event) => {
                                   setTime({ s: Number(event.target.value) })
                                 }}
@@ -345,7 +355,7 @@ export function Calculator (props: CalculatorProps): JSX.Element {
                                       ? COLOR
                                       : {}
                                 }
-                                value={((payload.pacing) != null) ? Math.floor(payload.pacing / 60) : ''}
+                                value={((payload.pacing) != null) ? Math.floor(payload.pacing / 60).toString() : ''}
                                 onChange={(event) => {
                                   setPacing({ m: Number(event.target.value) })
                                 }}
@@ -360,7 +370,7 @@ export function Calculator (props: CalculatorProps): JSX.Element {
                                       ? COLOR
                                       : {}
                                 }
-                                value={((payload.pacing) != null) ? Math.floor(payload.pacing % 60) : ''}
+                                value={((payload.pacing) != null) ? Math.floor(payload.pacing % 60).toString() : ''}
                                 onChange={(event) => {
                                   setPacing({ s: Number(event.target.value) })
                                 }}
