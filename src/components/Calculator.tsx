@@ -29,7 +29,7 @@ export function Calculator (props: CalculatorProps): JSX.Element {
           distance = distance / UNIT_FACTOR
         }
         if (pacing !== undefined) {
-          pacing = pacing / UNIT_FACTOR
+          pacing = pacing * UNIT_FACTOR
         }
         break
       }
@@ -38,7 +38,7 @@ export function Calculator (props: CalculatorProps): JSX.Element {
           distance = distance * UNIT_FACTOR
         }
         if (pacing !== undefined) {
-          pacing = pacing * UNIT_FACTOR
+          pacing = pacing / UNIT_FACTOR
         }
         break
       }
